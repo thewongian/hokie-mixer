@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">HokieMixer</string>
+    <string name="editTitle">Song Editing</string>
+    <string name="editHeader1">Song</string>
+    <string name="defaultSong">Go Tech Go!</string>
+    <string name="editHeader2">Sound Effects</string>
+    <string name="defaultEffect">Clapping</string>
+    <string name="play">Play</string>
+    <string name="playTitle">Now Playing</string>
+    <string name="playHeader">Current Song</string>
+    <string name="restart">Restart</string>
+    <string name="defaultPhotoDesc">Excessive Celebration</string>
+
+</resources>
