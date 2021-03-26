@@ -16,8 +16,8 @@ public class MusicPlayer implements MediaPlayer.OnCompletionListener {
     private int musicIndex = 0;
     private int musicStatus = 0;
     private MusicService musicService;
-    public static final int[] MUSIC_PATH = {R.raw.gotechgo, R.raw.wap, R.raw.entersandman};
-    public static final String[] MUSIC_NAME = {"Go Tech Go", "WAP", "Enter Sandman"};
+    public static final int[] MUSIC_PATH = {R.raw.gotechgo, R.raw.techtriumph, R.raw.entersandman};
+    public static final String[] MUSIC_NAME = {"Go Tech Go", "Tech Triumph", "Enter Sandman"};
 
     private EffectListener effectListener;
     private int[] effectPositions = new int[3];
