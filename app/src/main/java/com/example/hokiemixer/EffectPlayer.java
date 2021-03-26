@@ -25,6 +25,7 @@ public class EffectPlayer implements MediaPlayer.OnCompletionListener{
     public static final int[] EFFECT_PATHS = {R.raw.cheering, R.raw.clapping, R.raw.letsgohokies};
 
 
+
     /**
      *
      * @param index
@@ -83,9 +84,6 @@ public class EffectPlayer implements MediaPlayer.OnCompletionListener{
 
     }
 
-    public void playEffect(int path) {
-
-    }
     @Override
     public void onCompletion(MediaPlayer mp) {
         player.release();

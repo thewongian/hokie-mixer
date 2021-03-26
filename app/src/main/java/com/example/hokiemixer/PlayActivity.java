@@ -14,7 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class PlayActivity extends AppCompatActivity implements View.OnClickListener {
+public class PlayActivity extends AppCompatActivity implements View.OnClickListener, MusicPlayer.EffectListener {
     TextView currentSong;
     Button play, restart;
     ImageView image;
@@ -28,6 +28,7 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
     int currentSongIndex;
     boolean differentEffect;
 
+    int currentImagePath = R.drawable.excessivecelebration;
     public static final String INITIALIZE_STATUS = "intialization status";
     public static final String MUSIC_PLAYING = "music playing";
 
@@ -44,7 +45,7 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
         restart = (Button) findViewById(R.id.restart);
         restart.setOnClickListener(this);
         image = (ImageView) findViewById(R.id.image);
-
+        image.setBackgroundResource(currentImagePath);
 
         Bundle b1 = getIntent().getExtras();
         currentSong.setText(b1.getString(EditSongActivity.TITLE_KEY));
@@ -57,7 +58,7 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
         effectPlayer.setEffectOffset(2, b1.getFloat(EditSongActivity.PERCENT3_KEY));
 
         effectPlayer.sort();
-        System.out.println(effectPlayer.toString());
+
 
         currentSongIndex = b1.getInt(EditSongActivity.INDEX_KEY);
 
@@ -89,6 +90,7 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
 
         if (v.getId() == R.id.play_pause) {
             if (isBound) {
+                musicService.setEffectListener(this);
                 switch(musicService.getPlayingStatus()) {
                     case 0:
                         musicService.setEffectPlayer(effectPlayer);
@@ -156,11 +158,14 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private ServiceConnection musicServiceConnection = new ServiceConnection() {
+
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             MusicService.MyBinder binder = (MusicService.MyBinder) iBinder;
             musicService = binder.getService();
             isBound = true;
+
+
 
 
             switch (musicService.getPlayingStatus()) {
@@ -193,4 +198,9 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
             isBound = false;
         }
     };
+
+    @Override
+    public void setImage(int path) {
+        image.setImageResource(path);
+    }
 }

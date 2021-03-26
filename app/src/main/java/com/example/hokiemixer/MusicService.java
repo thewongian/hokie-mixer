@@ -1,6 +1,7 @@
 package com.example.hokiemixer;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Binder;
@@ -24,6 +25,10 @@ public class MusicService extends Service {
     int effectIndex = 0;
     private boolean running;
 
+
+
+
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -32,20 +37,27 @@ public class MusicService extends Service {
 
     }
 
+
     public void setEffectPlayer(EffectPlayer player) {
         effectPlayer = player;
+
+    }
+
+    public void setEffectListener(Context context) {
+        musicPlayer.setEffectListener(context);
     }
     public void startMusic(){
-
+        running = true;
+        asyncTask.execute();
         musicPlayer.playMusic();
     }
 
     public void pauseMusic(){
-
         musicPlayer.pauseMusic();
     }
 
     public void resumeMusic(){
+        running = true;
 
         musicPlayer.resumeMusic();
     }
@@ -60,7 +72,11 @@ public class MusicService extends Service {
     }
     public void restartMusic() {
 
+        effectIndex = 0;
         musicPlayer.restartMusic();
+    }
+    public void playEffect(int path) {
+        musicPlayer.playEffect(path);
     }
     public void stopMusic() {
         musicPlayer.stopMusic();
@@ -90,24 +106,32 @@ public class MusicService extends Service {
 
         protected void onProgressUpdate(Integer... values) {
             super.onProgressUpdate(values);
+            playEffect(values[0]);
 
         }
         @Override
         protected Void doInBackground(Void... voids) {
-            int maxDuration = musicPlayer.player.getDuration();
-            int position = musicPlayer.player.getCurrentPosition();
+            while (running) {
+                if (musicPlayer.player != null) {
+                    int maxDuration = musicPlayer.player.getDuration();
+                    int position = musicPlayer.player.getCurrentPosition();
 
-            int effectTime = (int) (effectPlayer.getPercentage()[effectIndex] * maxDuration);
-            if (position > effectTime) {
-                publishProgress(effectPlayer.getPath(effectIndex));
-                effectIndex++;
+                    int effectTime = (int) (effectPlayer.getPercentage()[effectIndex] * maxDuration);
+                    if (position > effectTime) {
+                        publishProgress(effectPlayer.getPath(effectIndex));
+                        effectIndex++;
 
-            }
-            try {
-                Thread.sleep(500);
-            }
-            catch (Exception e) {
-                System.out.println(e);
+                    }
+                    if (effectIndex > 2) {
+                        break;
+                    }
+                }
+                try {
+                    Thread.sleep(500);
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+
             }
             return null;
         }
